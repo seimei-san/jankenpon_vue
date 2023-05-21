@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" type="text/css">
+    <title>JAN KEN PON!</title>
+</head>
+
+<body>
+    <div id="app" v-cloak>  <!-- Vue Application Template -->
+
+
+        <header>
+            <div class="score_box">
+                <!-- 画面左がオマエの得点 -->
+                <!-- 画面右がオレ様の得点　 -->
+                <div class="score_box_left">
+                    <img src="img/null.png" alt="omae_point_roun1" class="point" id="omae_point_round1">
+                    <img src="img/null.png" alt="omae_point_round2" class="point" id="omae_point_round2">
+                    <img src="img/null.png" alt="omae_point_round3" class="point" id="omae_point_round3">
+                    <img src="img/null.png" alt="omae_point_round4" class="point" id="omae_point_round4">
+                    <img src="img/null.png" alt="omae_point_round5" class="point" id="omae_point_round5">
+                </div>
+                <div class="title" id="title"><p>早打ちじゃんけんぽん対決！</p><p id="sub_title" v-bind:style="style_sub_title">{{ sub_title }}</p></div>
+                <div class="Score_box_right">
+                    <img src="img/null.png" alt="oresama_point_round1" class="point" id="oresama_point_round1">
+                    <img src="img/null.png" alt="oresama_point_round2" class="point" id="oresama_point_round2">
+                    <img src="img/null.png" alt="oresama_point_round3" class="point" id="oresama_point_round3">
+                    <img src="img/null.png" alt="oresama_point_round4" class="point" id="oresama_point_round4">
+                    <img src="img/null.png" alt="oresama_point_round5" class="point" id="oresama_point_round5">
+                </div>
+            </div>
+        </header>
+        
+        <!-- Box to display Gu/Choki/Pa and Speacks -->
+        <main class="body_main" id="body_main">
+            <p class="user_name">{{ user_name }}</p>
+
+            <Transition name="fade">
+                <div class="dialog" id="dialog" v-if="alert_dialog">
+                    <p>名前を入れ直せ！</p>
+                    <p>全角５文字までだ！</p><br>
+                    <button id="btn_yes" v-on:click="btn_yes">わかりました</button>
+                </div>
+            </Transition>
+
+            
+            <!-- Shout Jan -->
+            <Transition type="transition" name="shout">
+            <!-- <Transition name="fade"> -->
+                <div class="shout_jankenpon" id="shout_jan" v-if="shout_jan">
+                    <img src="img/jan.png" alt="">
+                </div>
+            </Transition>
+        
+            <!-- Shout Ken -->
+            <Transition type="transition" name="shout">
+                <div class="shout_jankenpon" id="shout_ken" v-if="shout_ken">
+                    <img src="img/ken.png" alt="">
+                </div>
+            </Transition>
+        
+            <!-- Pon -->
+            <Transition type="transition" name="shout">
+                <div class="shout_jankenpon" id="shout_pon" v-if="shout_pon">
+                    <img src="img/pon.png" alt="">
+
+                </div>
+            </Transition>
+                
+            <!-- Oresama Speak 1 -->
+            <Transition name='fade'>
+                <div class="oresama_speak1" id="oresama_speak1" v-if="oresama_speak1">
+                    <p class="oresama_text1" id="oresama_text1" v-html="oresama_speak1_text"></p>
+                </div>
+            </Transition>
+                
+            <!-- Oresama Speak 2 -->
+            <Transition name="fade">
+                <div class="oresama_speak2" id="oresama_speak2" v-if="oresama_speak2">
+                    <p class="oresama_text2" id="oresama_text2" v-html="oresama_speak2_text"></p>
+                </div>
+            </Transition>
+        
+            <!-- Omae- Speak 1 -->
+            <Transition name="fade">
+                <div class="omae_speak1" id="omae_speak1" v-if="omae_speak1">
+                    <p class="omae_text1" id="omae_text1" v-html="omae_speak1_text"></p>
+                </div>
+            </Transition>
+        
+            <!-- Omae Speak 2 -->
+            <Transition name="fade">
+                <div class="omae_speak2" id="omae_speak1" v-if="omae_speak2">
+                    <p class="omae_text2" id="omae_text2" v-html="omae_speak2_text"></p>
+                </div>
+            </Transition>
+                
+            <!-- GU GU GU GU GU -->
+            <!-- Oresama Gu -->
+            <Transition name="guchokipa">
+                <div class="oresama_guchokipa" id="oresama_guchokipa" v-if="oresama_gu">
+                    <img src="img/oresama_gu.png" alt="Jankenpon Gu">
+                </div>
+            </Transition>
+                
+            <!-- Omae Gu -->
+            <Transition name="guchokipa">
+                <div class="omae_guchokipa" id="omae_guchokipa" v-if="omae_gu">
+                    <img src="img/omae_gu.png" alt="Janv-bindkenpon Gu">
+                </div>
+            </Transition>
+    
+            <!-- CHOKI CHOKI CHOKI CHOKI CHOKI -->
+            <!-- Oresama Choki -->
+            <Transition name="guchokipa">
+                <div class="oresama_guchokipa" id="oresama_guchokipa" v-if="oresama_choki">
+                    <img src="img/oresama_choki.png" alt="Jankenpon Choki">
+                </div>
+            </Transition>
+        
+            <!-- Omae Choki -->
+            <Transition name="guchokipa">
+                <div class="omae_guchokipa" id="omae_guchokipa" v-if="omae_choki">
+                    <img src="img/omae_choki.png" alt="Jankenpon Choki">
+                </div>
+            </Transition>
+        
+            <!-- PA PA PA PA PA -->
+            <!-- Oresama Pa -->
+            <Transition name="guchokipa">
+                <div class="oresama_guchokipa" id="oresama_guchokipa" v-if="oresama_pa">
+                    <img src="img/oresama_pa.png" alt="Jankenpon Pa">
+                </div>
+            </Transition>
+            
+            <!-- Omae Pa -->
+            <Transition name="guchokipa">
+                <div class="omae_guchokipa" id="omae_guchokipa" v-if="omae_pa">
+                    <img src="img/omae_pa.png" alt="Jankenpon Pa">
+                </div>
+            </Transition>
+            
+            <!-- NO NO NO NO NO NO -->
+            <!-- Atodashi No No -->
+            <Transition name="fade">
+                <div class="atodashi_no" id="atodashi_no" v-if="atodashi_no">
+                    <img src="img/atodashi_no.png" alt="Jankenpon Atodaashi No">
+                </div>
+            </Transition>
+
+            <!-- WIN WIN WIN WIN WIN -->
+            <!-- Winner Logo -->
+            <Transition name="fade">
+                <div class="winner_box" class="winner_box" id="winner_box" v-bind:style="style_winner_box" v-if="winner_box">
+                    <img src="img/winner_s.png" alt="">
+                </div>
+            </Transition>
+
+    
+        </main>
+
+        <!-- Controller Box displaying Start, Challenge, Again and Gu/Choki/Pa box -->
+        <div class="controller" id="controller">
+            
+            <!-- Start Box -->
+            <Transition name="custom-classes-Transition" enter-active-class="animate__fadeInRightBig" leave-active-class="animate__fadeOutLeftBig">
+            <!-- <Transition name="fade"> -->
+                <div class="start_box" id="start_box" v-if="start_box">
+                    <div class="user_name_box">
+                        <label for="input_user_name">オマエの名前<br>（全角5文字まで）</label>
+                        <input type="text" class="input_user_name" id="input_user_name">
+                    </div>
+                    <div class="btn_start_box">
+                        <img src="img/btn_start.png" alt="Janken Start" class="btn_start" v-on:click="startJankenpon">
+                    </div>
+                    <div class="controller_space_box"></div>
+                </div>
+            </Transition>
+
+    
+            <!-- Challenge Box -->
+            <Transition name="custom-classes-Transition" enter-active-class="animate  fadeInRightBig" leave-active-class="animate  fadeOutLeftBig">
+            <!-- <Transition name="fade"> -->
+                <div class="challenge_box" id="challenge_box" v-if="challenge_box">
+                    <div class="controller_space_box"></div>
+                    <div class="btn_challenge_box">
+                        <img src="img/btn_challenge.png" alt="Janken Challenge" class="btn_challenge" v-on:click="challengeJankenpon">
+                    </div>
+                    <div class="quit_jankenpon">
+                        <img src="img/btn_end.png" alt="Quit Jankenpon" class="btn_quit" v-on:click="quitJankenponFromChallenge">
+                    </div>
+                </div>
+            </Transition>
+
+    
+            <!-- Again Box -->
+            <Transition name="custom-classes-Transition" enter-active-class="animate__fadeInRightBig" leave-active-class="animate__fadeOutLeftBig">
+            <!-- <Transition name="fade"> -->
+                <div class="again_box" id="again_box" v-if="again_box">
+                    <div class="controller_space_box"></div>
+                    <div class="btn_again_box">
+                        <img src="img/btn_again.png" alt="Janken again" class="btn_again" v-on:click="challengeJankenponAgain">
+                    </div>
+                    <div class="quit_jankenpon">
+                        <img src="img/btn_end.png" alt="Quit Jankenpon" class="btn_quit" v-on:click="quitJankenponFromAgain">
+                    </div>
+                </div>
+            </Transition>
+    
+            <!-- Gu Choki Pa -->
+            <!-- <Transition name="fade"> -->
+            <Transition name="custom-classes-Transition" enter-active-class="animate__fadeInRightBig" leave-active-class="animate__fadeOutLeftBig">
+                <div class="gu_choki_pa_box" id="gu_choki_pa_box" v-if="gu_choki_pa_box">
+                    <div class="controller_space_box"></div>
+                    <div class="btn_gu_box">
+                        <img src="img/btn_gu_s.png" alt="Gu" class="btn_guchokipa" v-on:click="omaeGu">
+                    </div>
+                    <div class="btn_choki_box">
+                        <img src="img/btn_choki_s.png" alt="Choki" class="btn_guchokipa" v-on:click="omaeChoki">
+                    </div>
+                    <div class="btn_pa_box">
+                        <img src="img/btn_pa_s.png" alt="Pa" class="btn_guchokipa" v-on:click="omaePa">
+                    </div>
+                    <div class="controller_space_box"></div>
+                </div>
+            </Transition>
+    
+    
+    
+    
+    
+    
+        </div>
+
+    
+    
+    
+    
+        </div>
+        <div class="spacer">
+        </div>
+        <footer>
+            copyrights 2023 DREAM-LINAKGE All Rights Reserved; Sounde Source: びたちー素材館
+        </footer>
+    </div>
+
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="js/variables.js"></script>
+    <script src="js/functions.js"></script>
+    <script src="js/vue.js"></script>
+    <script>
+    </script>
+ 
+</body>
+
+</html>
